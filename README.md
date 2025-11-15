@@ -1,11 +1,11 @@
-# FieldSense
+# RootSense
 
 **A Field-Edge Micro-Station for Real-Time Runoff Risk**
 
 ---
 
 ## Overview
-FieldSense is a low-cost, Arduino-based micro-station designed to provide farmers and land managers with **real-time runoff risk alerts** at the edge of their fields. By combining soil, weather, and environmental signals, FieldSense helps farmers make informed decisions to **protect yields, reduce nutrient loss, and save costs**.
+RootSense is a low-cost, Arduino-based micro-station designed to provide farmers and land managers with **real-time runoff risk alerts** at the edge of their fields. By combining soil, weather, and environmental signals, RootSense helps farmers make informed decisions to **protect yields, reduce nutrient loss, and save costs**.
 
 ---
 
@@ -47,7 +47,7 @@ FieldSense is a low-cost, Arduino-based micro-station designed to provide farmer
 
 ## Future Extensions
 - Add **ultrasonic water-level sensor** for ditch monitoring.  
-- Connect multiple FieldSense nodes for **field network monitoring**.  
+- Connect multiple RootSense nodes for **field network monitoring**.  
 - Integrate **mobile notifications or cloud logging** for remote farmers.  
 - Calibrate Runoff Risk Index with real local watershed data for improved accuracy.  
 
