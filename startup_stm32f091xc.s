@@ -1,21 +1,63 @@
-.syntax unified
-.cpu cortex-m0
-.thumb
+/* startup_stm32f0.s - minimal startup */
+    .syntax unified
+    .cpu cortex-m0
+    .thumb
+    .section .isr_vector,"a",%progbits
+    .type g_pfnVectors, %object
+    .size g_pfnVectors, .-g_pfnVectors
 
-.global Reset_Handler
-.extern main
+    .word   _estack
+    .word   Reset_Handler
+    .word   NMI_Handler
+    .word   HardFault_Handler
+    .word   0
+    .word   0
+    .word   0
+    .word   0
+    .word   0
+    .word   0
+    .word   0
 
-.equ STACK_SIZE, 0x400
-.section .stack, "aw", %nobits
-stack_top:
-    .space STACK_SIZE
+    .weak NMI_Handler
+    .type NMI_Handler, %function
+NMI_Handler:
+    b .
 
-.section .isr_vector, "a"
-    .word stack_top + STACK_SIZE   /* Initial SP */
-    .word Reset_Handler            /* Reset Handler */
+    .weak HardFault_Handler
+    .type HardFault_Handler, %function
+HardFault_Handler:
+    b .
 
+    .weak Reset_Handler
+    .type Reset_Handler, %function
 Reset_Handler:
-    ldr r0, =stack_top + STACK_SIZE
-    mov sp, r0
+    /* Copy .data from flash to RAM */
+    ldr r0, =_sdata
+    ldr r1, =_edata
+    ldr r2, =_etext
+1:
+    cmp r0, r1
+    ittt lt
+    ldrlt r3, [r2], #4
+    strlt r3, [r0], #4
+    blt 1b
+
+    /* Zero fill .bss */
+    ldr r0, =_sbss
+    ldr r1, =_ebss
+2:
+    cmp r0, r1
+    it lt
+    movlt r3, #0
+    strlt r3, [r0], #4
+    blt 2b
+
+    /* Call SystemInit() and main() */
+    bl SystemInit
     bl main
-1:  b 1b
+
+    /* If main returns, loop */
+    b .
+
+    .section .text
+    .size Reset_Handler, .-Reset_Handler

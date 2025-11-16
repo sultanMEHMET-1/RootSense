@@ -1,0 +1,22 @@
+# Build artifacts
+build/
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.d
+
+# Editor files
+.vscode/
+*.swp
+*~
+.DS_Store
+
+# Backup files
+*.bak
+*.old
+
+# Debug files
+*.su
+*.lst
