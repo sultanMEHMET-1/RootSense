@@ -15,6 +15,11 @@ OBJS = $(SRCS:src/%.c=$(BUILD)/%.o)
 
 all: $(BUILD) $(BUILD)/$(TARGET).elf $(BUILD)/$(TARGET).bin
 
+STARTUP = startup_stm32f091xc.s
+$(BUILD)/$(TARGET).elf: $(OBJS) $(STARTUP)
+	arm-none-eabi-gcc $(OBJS) $(STARTUP) $(LDFLAGS) -o $@
+
+
 $(BUILD):
 	mkdir -p $(BUILD)
 
