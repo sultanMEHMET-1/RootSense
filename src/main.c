@@ -17,9 +17,9 @@ int main(void) {
 
     while (1) {
         GPIOC->BSRR = GPIO_BSRR_BS_0;
-        delay(100000);
+        delay(500000);
 
         GPIOC->BSRR = GPIO_BSRR_BR_0;
-        delay(100000);
+        delay(500000);
     }
 }
