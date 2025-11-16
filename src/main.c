@@ -7,15 +7,19 @@ void delay(volatile uint32_t s) {
 }
 
 int main(void) {
-    // Enable GPIOA clock
-    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-    (void)RCC->AHBENR; // ensure clock write completes
+    // Enable GPIOA and GPIOC clocks
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN;
+    (void)RCC->AHBENR;
 
-    GPIOA->MODER &= ~(0x3 << (8 * 2));  // clear mode bits for pin 8
-    GPIOA->MODER |=  (0x1 << (8 * 2));  // set pin 8 as general purpose output
+    // PC0 as output
+    GPIOC->MODER &= ~(3U << (0 * 2));
+    GPIOC->MODER |=  (1U << (0 * 2));
 
     while (1) {
-        GPIOA->ODR ^= (1 << 8); // toggle PA5
-        for (volatile uint32_t i = 0; i < 10000000; i++) __asm__("nop");
+        GPIOC->BSRR = GPIO_BSRR_BS_0;
+        delay(1000000);
+
+        GPIOC->BSRR = GPIO_BSRR_BR_0;
+        delay(1000000);
     }
 }
