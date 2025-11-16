@@ -3,8 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/include",
-                "${workspaceFolder}/Drivers/CMSIS/Include",
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/Drivers/CMSIS/Core/Include",
                 "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F0xx/Include"
             ],
             "defines": [
@@ -13,8 +13,9 @@
             "compilerPath": "/usr/bin/arm-none-eabi-gcc",
             "cStandard": "c11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "linux-gcc-arm"
+            "intelliSenseMode": "gcc-arm"
         }
     ],
     "version": 4
 }
+

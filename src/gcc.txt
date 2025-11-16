@@ -1,0 +1,1 @@
+arm-none-eabi-gcc -mcpu=cortex-m0 -mthumb -O2 -Wall -nostdlib   -IDrivers/CMSIS/Device/ST/STM32F0xx/Include   -IDrivers/CMSIS/Core/Include   -T stm32f0.ld   startup_stm32f091xc.s src/main.c   -o build/main.elf
