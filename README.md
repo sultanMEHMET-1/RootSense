@@ -1,57 +1,109 @@
 # RootSense
 
-**A Field-Edge Micro-Station for Real-Time Runoff Risk**
+RootSense is a field-edge monitoring prototype for runoff-risk awareness. It combines STM32 firmware for local sensor signaling with a Python farm-advisor layer that pulls NOAA weather data, scores runoff risk, and calls the Gemini API for field-management recommendations.
 
----
+## What It Does
 
-## Overview
-RootSense is a low-cost, Arduino-based micro-station designed to provide farmers and land managers with **real-time runoff risk alerts** at the edge of their fields. By combining soil, weather, and environmental signals, RootSense helps farmers make informed decisions to **protect yields, reduce nutrient loss, and save costs**.
+- Reads or simulates field conditions such as water distance, ponding, and temperature.
+- Classifies runoff risk as low, moderate, or high from sensor and forecast data.
+- Exposes the advisor logic through a reusable Python module, CLI, Tkinter GUI, and Flask API.
+- Calls Gemini for natural-language farm advice while keeping `GEMINI_API_KEY` out of source code.
+- Includes STM32F091 firmware and a Makefile for the embedded proof of concept.
 
----
+## Repository Layout
 
-## Key Features
-- **Soil Moisture Monitoring** – Detect saturated conditions that increase runoff risk.  
-- **Weather Awareness** – Temperature, humidity, and light sensors help predict storm onset.  
-- **Instant Alerts** – LED indicators, LCD display, and buzzer for LOW / MEDIUM / HIGH runoff risk.  
-- **Hyper-Local Data** – Field-level sensing complements broader watershed monitoring.  
-- **Low-Cost & Open-Source** – Built with an Arduino Uno and commonly available sensors.  
+```text
+.
+|-- src/                       STM32 application sources
+|-- Drivers/                   STM32 CMSIS/HAL vendor files
+|-- Makefile                   Firmware build targets
+|-- farm_advisor_backend.py    Shared weather, sensor, risk, and AI logic
+|-- farm_advisor_api.py        Flask REST API
+|-- farm_advisor.py            Command-line demo
+|-- farm_advisor_gui.py        Tkinter dashboard demo
+|-- tests/                     Python unit tests
+|-- FLASK_API_GUIDE.md         REST API usage guide
+|-- README_ADVISOR.md          Advisor setup notes
+|-- README_INTEGRATION.md      Frontend/backend integration notes
+```
 
----
+## Python Quick Start
 
-## Hardware Components
-- Arduino Uno (Elegoo or compatible)  
-- Capacitive Soil Moisture Sensor  
-- DHT22 / BME280 (Temp + Humidity + Pressure)  
-- Light Sensor (LDR / BH1750)  
-- Rain Sensor (optional)  
-- LED indicators  
-- Buzzer  
-- LCD Display  
+Create a virtual environment and install dependencies:
 
----
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
 
-## How It Works
-1. Sensors continuously measure soil moisture, temperature, humidity, light, and rainfall.  
-2. Arduino calculates a **Runoff Risk Index** based on combined sensor readings.  
-3. LCD displays the current risk: `LOW`, `MEDIUM`, or `HIGH`.  
-4. LED colors and buzzer provide instant, intuitive alerts for immediate action.  
+Gemini setup:
 
----
+```bash
+copy .env.example .env
+set GEMINI_API_KEY=your-gemini-api-key
+```
 
-## Demo / Simulation
-- Pour water on the soil probe → LED turns red, buzzer sounds, LCD shows `HIGH RUNOFF RISK`.  
-- Use light shading to simulate cloud cover → risk adjusts accordingly.  
-- Ideal for hackathon demos and educational use.  
+The app loads `.env` automatically during local development.
 
----
+Run the CLI demo:
 
-## Future Extensions
-- Add **ultrasonic water-level sensor** for ditch monitoring.  
-- Connect multiple RootSense nodes for **field network monitoring**.  
-- Integrate **mobile notifications or cloud logging** for remote farmers.  
-- Calibrate Runoff Risk Index with real local watershed data for improved accuracy.  
+```bash
+python farm_advisor.py
+```
 
----
+Run the Flask API:
+
+```bash
+python farm_advisor_api.py
+```
+
+Then open `http://127.0.0.1:5000` or call `GET /api/data`.
+
+## Firmware Build
+
+The firmware targets an STM32F091RCT6-class Cortex-M0 board and expects the ARM embedded GCC toolchain on your path.
+
+```bash
+make
+```
+
+Useful targets:
+
+```bash
+make clean
+make flash
+```
+
+## API Highlights
+
+- `GET /api/data` returns sensor readings, forecast, alerts, and runoff risk.
+- `GET /api/risk` returns the current runoff-risk score and recommendation.
+- `POST /api/advice` accepts `{"question": "Should I irrigate today?"}` and returns Gemini-backed farm advice.
+- `POST /api/location` updates the weather location for the running server.
+
+See [FLASK_API_GUIDE.md](FLASK_API_GUIDE.md) for request and response examples.
+
+## Testing
+
+Run the unit tests:
+
+```bash
+python -m unittest discover
+```
+
+To smoke-test the local Flask API after starting the server:
+
+```bash
+python test_api.py
+```
+
+## Notes
+
+- Sensor readings in the Python demo are simulated until real serial or telemetry integration is connected.
+- weather.gov only supports United States locations.
+- Gemini-backed advice requires `GEMINI_API_KEY`; sensor, weather, and runoff-risk data still work while the key is being configured.
 
 ## License
-MIT License – Open-source hardware and code.
+
+MIT License. See [LICENSE](LICENSE).

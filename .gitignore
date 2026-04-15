@@ -20,3 +20,19 @@ build/
 # Debug files
 *.su
 *.lst
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local environments and secrets
+.env
+.venv/
+venv/
+env/
+
+# OS/editor noise
+Thumbs.db
