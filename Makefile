@@ -1,6 +1,6 @@
 # Makefile for STM32F091RCT6 RootSense Project
 
-PROJECT = stm32f0-ultrasonic
+PROJECT = rootsense-firmware
 SRCDIR  = src
 BUILD_DIR = build
 
@@ -51,7 +51,7 @@ LDFLAGS = -TSTM32F091RCTX_FLASH.ld --specs=nosys.specs -Wl,--gc-sections \
 .PHONY: all clean flash
 
 all: $(BUILD_DIR)/$(PROJECT).elf $(BUILD_DIR)/$(PROJECT).bin $(BUILD_DIR)/$(PROJECT).hex
-	@echo "✓ Build complete!"
+	@echo "Build complete."
 	@$(SIZE) $(BUILD_DIR)/$(PROJECT).elf
 
 # Compile C sources
