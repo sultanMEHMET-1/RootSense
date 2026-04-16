@@ -62,11 +62,13 @@ Then open `http://127.0.0.1:5000` or call `GET /api/data`.
 
 ## Firmware Build
 
-The firmware targets an STM32F091RCT6-class Cortex-M0 board and expects the ARM embedded GCC toolchain on your path.
+The firmware targets an STM32F091RCT6-class Cortex-M0 board and expects the ARM embedded GCC toolchain on your path. The active entrypoint in `src/main.c` reads an ultrasonic distance sensor, samples an AD8495 temperature input on ADC, estimates ponding depth against a calibrated dry baseline, and drives green/yellow/red LEDs for low, moderate, and high runoff risk.
 
 ```bash
 make
 ```
+
+The default build artifacts are written under `build/` as `rootsense-firmware.elf`, `.bin`, `.hex`, and `.map`.
 
 Useful targets:
 
@@ -102,7 +104,7 @@ python test_api.py
 
 - Sensor readings in the Python demo are simulated until real serial or telemetry integration is connected.
 - weather.gov only supports United States locations.
-- Gemini-backed advice requires `GEMINI_API_KEY`; sensor, weather, and runoff-risk data still work while the key is being configured.
+- Gemini-backed advice requires `GEMINI_API_KEY`; missing keys are reported by advice endpoints only, while sensor, weather, and runoff-risk data continue to work.
 
 ## License
 

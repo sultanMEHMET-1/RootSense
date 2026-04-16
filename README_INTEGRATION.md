@@ -11,6 +11,7 @@ Optional:
 
 - `farm_advisor_api.py` for a REST API wrapper
 - `FLASK_API_GUIDE.md` for endpoint examples
+- `.env.example` as the credential template for Gemini and location settings
 
 ## Basic Python Usage
 
@@ -26,6 +27,8 @@ print(data["risk"])
 advice = api.ask_ai_advisor("Should I irrigate today?")
 print(advice)
 ```
+
+`ask_ai_advisor()` calls Gemini when `GEMINI_API_KEY` is configured. If the key is missing, it returns a setup message instead of making a model request.
 
 ## Returned Data
 
@@ -86,7 +89,7 @@ async function askAdvisor(question) {
 
 ## Configuration
 
-Set values through environment variables or a local `.env` file:
+Set values through environment variables or a local `.env` file. Do not commit the real `.env` file:
 
 ```bash
 copy .env.example .env

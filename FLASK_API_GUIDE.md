@@ -1,6 +1,6 @@
 # RootSense Flask API Guide
 
-The Flask API wraps the shared `FarmAdvisorAPI` service for dashboards and frontend demos.
+The Flask API wraps the shared `FarmAdvisorAPI` service for dashboards and frontend demos. It keeps the public routes stable while the shared backend handles weather lookup, runoff scoring, and Gemini advice.
 
 ## Start the Server
 
@@ -70,7 +70,7 @@ Returns a runoff-risk assessment.
 
 ### `POST /api/advice`
 
-Calls Gemini and returns farm-management advice. `GEMINI_API_KEY` must be configured in the environment or local `.env` file.
+Calls Gemini and returns farm-management advice. `GEMINI_API_KEY` must be configured in the environment or local `.env` file for model output. If the key is missing, this endpoint returns a setup message while the non-AI endpoints continue to work.
 
 Request:
 
